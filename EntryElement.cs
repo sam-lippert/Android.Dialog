@@ -94,7 +94,7 @@ namespace Android.Dialog
         {
             TextView label;
             var view = DroidResources.LoadStringEntryLayout(context, convertView, parent, LayoutId, out label, out _entry);
-            if (view != null)
+            if (view != null && _entry != null)
             {
                 view.FocusableInTouchMode = false;
                 view.Focusable = false;

@@ -1,10 +1,12 @@
 using System;
 using Android.Support.V4.App;
+using Android.Text.Style;
 
 namespace Android.Dialog
 {
     public class DialogListFragment : ListFragment
     {
+        private RootElement _root = null;
         public RootElement Root
         {
             get { return DialogAdapter == null ? null : DialogAdapter.Root; }
@@ -15,7 +17,7 @@ namespace Android.Dialog
                 value.ValueChanged += HandleValueChangedEvent;
 
                 if (ListAdapter == null)
-                    ListAdapter = DialogAdapter = new DialogAdapter(Activity, value);
+                    _root = value;
                 else
                     DialogAdapter.Root = value;
 
@@ -30,7 +32,12 @@ namespace Android.Dialog
 
         public override void OnViewCreated(Views.View p0, OS.Bundle p1)
         {
-            if (DialogAdapter == null) return;
+            if (DialogAdapter == null)
+            {
+                ListAdapter = DialogAdapter = new DialogAdapter(Activity, _root, ListView);
+                _root = null;
+            }
+
             DialogAdapter.List = ListView;
             DialogAdapter.RegisterListView();
             base.OnViewCreated(p0, p1);
